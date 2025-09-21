@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Package, Eye, EyeOff } from "lucide-react";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function Login() {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5757/api/employees/login", {
+      const response = await fetch(`${BASE_URL}/api/employees/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

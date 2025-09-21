@@ -13,6 +13,7 @@ import {
 import ProductForm from "./ProductForm";
 import FlashMessage from "./FlashMessage";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -32,7 +33,7 @@ export default function ProductManagement() {
   const fetchProducts = async (page = 1) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/inventory?page=${page}&limit=${itemsPerPage}`);
+      const res = await fetch(`${BASE_URL}/api/inventory?page=${page}&limit=${itemsPerPage}`);
       const data = await res.json();
       setProducts(data.data);
       setTotalPages(data.totalPages);
@@ -65,7 +66,7 @@ export default function ProductManagement() {
         formData.append("image", formDataObj.image);
       }
 
-      const res = await fetch("http://localhost:5757/api/inventory/add", {
+      const res = await fetch(`${BASE_URL}/api/inventory/add`, {
         method: "POST",
         body: formData,
       });
@@ -100,7 +101,7 @@ export default function ProductManagement() {
     }
 
     try {
-      const res = await fetch(`/api/inventory/${editingProduct._id}/edit`, {
+      const res = await fetch(`${BASE_URL}/api/inventory/${editingProduct._id}/edit`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedData),
@@ -130,7 +131,7 @@ export default function ProductManagement() {
             setFlash({ message: "", type: "" }); // Close flash first
             setLoading(true);
             try {
-              const res = await fetch(`/api/inventory/${id}/delete`, {
+              const res = await fetch(`${BASE_URL}/api/inventory/${id}/delete`, {
                 method: "DELETE",
               });
 

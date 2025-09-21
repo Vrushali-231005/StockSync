@@ -4,3 +4,5 @@ export const generatePassword = (name, deskNumber) => {
   const randomNum = Math.floor(1000 + Math.random() * 9000); // 4-digit random
   return `${prefix}${deskNumber}_${randomNum}`;
 };
+
+export const BASE_URL = "https://stocksync-inventory-management.onrender.com";

@@ -15,6 +15,7 @@ import EmployeeForm from "./EmployeeForm";
 import { useNavigate } from "react-router-dom";
 import FlashMessage from "./FlashMessage";
 import AssignInventoryModal from "./AssignInventoryModel";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function EmployeeManagement() {
   const [employees, setEmployees] = useState([]);
@@ -38,7 +39,7 @@ export default function EmployeeManagement() {
     setLoading(true);
     try {
   const res = await fetch(
-    `/api/employees?page=${page}&limit=${itemsPerPage}&search=${searchTerm}`
+    `${BASE_URL}/api/employees?page=${page}&limit=${itemsPerPage}&search=${searchTerm}`
   );
   const data = await res.json();
 
@@ -72,7 +73,7 @@ export default function EmployeeManagement() {
           <button
             onClick={async () => {
               try {
-                const res = await fetch(`/api/employees/${id}/deleteEmp`, { method: "DELETE" });
+                const res = await fetch(`${BASE_URL}/api/employees/${id}/deleteEmp`, { method: "DELETE" });
                 if (res.ok) {
                   fetchEmployees(currentPage);
                   setFlash({ message: "✅ Employee deleted successfully!", type: "success" });

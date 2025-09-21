@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function AssignInventoryModal({ employee, onClose }) {
   const [availableInventory, setAvailableInventory] = useState([]);
@@ -17,7 +18,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
   // Fetch available inventory
   const fetchAvailableInventory = async () => {
     try {
-      const res = await fetch("/api/inventory?page=1&limit=999");
+      const res = await fetch(`${BASE_URL}/api/inventory?page=1&limit=999`);
       const data = await res.json();
       setAvailableInventory(data.data || []);
     } catch {
@@ -29,7 +30,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
   const fetchAssignedInventory = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/employees/${employee._id}/assigned-inventory`);
+      const res = await fetch(`${BASE_URL}/api/employees/${employee._id}/assigned-inventory`);
       const data = await res.json();
       setAssignedInventory(data || []);
     } catch {
@@ -54,7 +55,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
 
     setAssignLoading(true);
     try {
-      const res = await fetch(`/api/employees/${employee._id}/assigned-inventory`, {
+      const res = await fetch(`${BASE_URL}/api/employees/${employee._id}/assigned-inventory`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ inventoryId: selectedInventoryId, quantity: assignQuantity }),
@@ -85,7 +86,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
   const removeOne = async (inventoryId) => {
     try {
       const res = await fetch(
-        `/api/employees/${employee._id}/assigned-inventory/${inventoryId}?reduce=1`,
+        `${BASE_URL}/api/employees/${employee._id}/assigned-inventory/${inventoryId}?reduce=1`,
         { method: "DELETE" }
       );
       if (!res.ok) throw new Error();
@@ -100,7 +101,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
   const removeAll = async (inventoryId) => {
     try {
       const res = await fetch(
-        `/api/employees/${employee._id}/assigned-inventory/${inventoryId}?all=true`,
+        `${BASE_URL}/api/employees/${employee._id}/assigned-inventory/${inventoryId}?all=true`,
         { method: "DELETE" }
       );
       if (!res.ok) throw new Error();
@@ -241,7 +242,7 @@ export default function AssignInventoryModal({ employee, onClose }) {
                           <td className="py-3 px-4 text-white">{item.name}</td>
                           <td className="py-3 px-4">
                             <img
-                              src={item.image ? `http://localhost:5757/${item.image}` : "/placeholder.svg"}
+                              src={item.image ? `${BASE_URL}/${item.image}` : "/placeholder.svg"}
                               alt={item.name}
                               className="w-10 h-10 rounded-md object-cover bg-slate-600"
                             />

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import FlashMessage from "./FlashMessage"; // Your FlashMessage component
+import { BASE_URL } from "../../utils/passwordGenerator";
 
 export default function AdminRequestManagement() {
   const [requests, setRequests] = useState([]);
@@ -26,7 +27,7 @@ export default function AdminRequestManagement() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/inventoryReq");
+      const res = await fetch(`${BASE_URL}/api/inventoryReq`);
       if (!res.ok) throw new Error("Failed to fetch requests");
 
       const allRequests = await res.json();
@@ -64,7 +65,7 @@ export default function AdminRequestManagement() {
               setFlash({ message: "", type: "" });
               setLoading(true);
               try {
-                const res = await fetch(`/api/inventoryReq/${id}/status`, {
+                const res = await fetch(`${BASE_URL}/api/inventoryReq/${id}/status`, {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ status }),
@@ -105,7 +106,7 @@ export default function AdminRequestManagement() {
               setFlash({ message: "", type: "" });
               setLoading(true);
               try {
-                const res = await fetch(`/api/inventoryReq/${id}`, {
+                const res = await fetch(`${BASE_URL}/api/inventoryReq/${id}`, {
                   method: "DELETE",
                 });
                 if (!res.ok) throw new Error("Failed to delete request");

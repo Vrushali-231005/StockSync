@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowLeft, Package, Search, Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function AssignedInventory() {
   const [assignedItems, setAssignedItems] = useState([]);
@@ -18,7 +19,7 @@ export default function AssignedInventory() {
     const fetchInventory = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5757/api/employees/${employeeId}/assigned-inventory`
+          `${BASE_URL}/api/employees/${employeeId}/assigned-inventory`
         );
         if (!res.ok) throw new Error("Failed to fetch inventory");
         const data = await res.json();
@@ -119,7 +120,7 @@ export default function AssignedInventory() {
                 <img
                   src={
                     item.image
-                      ? `http://localhost:5757/${item.image}`
+                      ? `${BASE_URL}/${item.image}`
                       : "/inventory-item.png"
                   }
                   alt={item.name}

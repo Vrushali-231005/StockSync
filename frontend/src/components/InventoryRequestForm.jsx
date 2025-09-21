@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Package, Send, ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function InventoryRequestForm() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function InventoryRequestForm() {
 
     const fetchInventory = async () => {
       try {
-        const invRes = await fetch("/api/inventory?page=1&limit=999");
+        const invRes = await fetch(`${BASE_URL}/api/inventory?page=1&limit=999`);
         const invData = await invRes.json();
         setAvailableInventory(invData.data || []);
       } catch (err) {
@@ -75,7 +76,7 @@ export default function InventoryRequestForm() {
 
     setSubmitting(true);
     try {
-      const response = await fetch("/api/inventoryReq/add", {
+      const response = await fetch(`${BASE_URL}/api/inventoryReq/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Copy } from "lucide-react";
 import { generatePassword } from "../../utils/passwordGenerator";
+import { BASE_URL } from "../../utils/passwordGenerator"
 
 export default function EmployeeForm({ employee, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -62,8 +63,8 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
     try {
       const method = employee ? "PUT" : "POST";
       const url = employee
-        ? `/api/employees/${employee._id}/edit`
-        : `/api/employees/add`;
+        ? `${BASE_URL}/api/employees/${employee._id}/edit`
+        : `${BASE_URL}/api/employees/add`;
 
       const payload = {
         ...formData,
