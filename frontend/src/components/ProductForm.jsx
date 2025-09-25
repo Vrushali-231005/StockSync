@@ -105,16 +105,39 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
           </div>
 
           {/* Image Upload */}
-          <div className="md:col-span-2">
-            <label className="block text-white font-medium mb-2">Image <span className="text-red-500">*</span></label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleChange("image", e.target.files[0])}
+          {/* Image Section */}
+<div className="md:col-span-2">
+  <label className="block text-white font-medium mb-2">
+    Image <span className="text-red-500">*</span>
+  </label>
 
-              className="w-full bg-[#112240] border border-blue-400 rounded-lg px-4 py-3 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-            />
-          </div>
+  {product ? (
+    <div className="flex items-center gap-4">
+      {/* Show existing image preview */}
+      {product.image ? (
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-20 h-20 object-cover rounded-lg border border-blue-400"
+        />
+      ) : (
+        <span className="text-gray-400 italic">No image uploaded</span>
+      )}
+      {/* Just show filename */}
+      <span className="text-gray-300">{product.image?.split("/").pop()}</span>
+    </div>
+  ) : (
+    <input
+      type="file"
+      accept="image/*"
+      onChange={(e) => handleChange("image", e.target.files[0])}
+      className="w-full bg-[#112240] border border-blue-400 rounded-lg px-4 py-3 text-white 
+                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
+                 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+    />
+  )}
+</div>
+
 
           {/* Total Quantity */}
           <div>
