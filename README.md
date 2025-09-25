@@ -9,7 +9,7 @@ A MERN-based Inventory & Employee Management System with real-time request handl
 ##For Login
 -admin dashboard - email:admin@gmail.com
                  - pass : admin123
--employee dashboard - Adda employee in admin dashboard . you will get a password on registered email use that for login and test 
+-employee dashboard - Add employee in admin dashboard . you will get a password on registered email use that for login and test 
 
 ## Features
 - Employee management
