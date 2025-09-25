@@ -183,15 +183,15 @@ export default function ProductManagement() {
       <div className="w-full min-h-screen bg-[#0a192f] px-6 py-6">
         {/* Header */}
        <header className="relative border-b border-slate-700 pb-4 mb-8 flex items-center">
-  {/* Left Logo */}
-  <div className="flex items-center space-x-3 absolute left-0">
-    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6 text-white" />
-              </div>
-    <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-      StockSync
-    </h1>
-  </div>
+    {/* Left Logo */}
+    <div className="flex items-center space-x-3 absolute left-0">
+      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Package className="w-6 h-6 text-white" />
+                </div>
+      <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        StockSync
+      </h1>
+    </div>
 
   {/* Center Title */}
   <div className="mx-auto text-center">

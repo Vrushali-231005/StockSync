@@ -118,14 +118,10 @@ export default function AssignedInventory() {
             >
               <div className="h-32 w-full overflow-hidden">
                 <img
-                  src={
-                    item.image
-                      ? `${BASE_URL}/${item.image}`
-                      : "/inventory-item.png"
-                  }
-                  alt={item.name}
-                  className="w-full h-full object-cover"
-                />
+                src={item.image || "/inventory-item.png"}
+                alt={item.name}
+                className="w-full h-full object-cover"
+              />  
               </div>
               <div className="p-4 space-y-2">
                 <h4 className="text-white font-semibold text-lg">

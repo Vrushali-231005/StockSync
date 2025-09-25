@@ -242,10 +242,11 @@ export default function AssignInventoryModal({ employee, onClose }) {
                           <td className="py-3 px-4 text-white">{item.name}</td>
                           <td className="py-3 px-4">
                             <img
-                              src={item.image ? `${BASE_URL}/${item.image}` : "/placeholder.svg"}
-                              alt={item.name}
-                              className="w-10 h-10 rounded-md object-cover bg-slate-600"
-                            />
+                                src={item.image || "/placeholder.svg"}
+                                alt={item.name}
+                                className="w-10 h-10 rounded-md object-cover bg-slate-600"
+                              />
+
                           </td>
                           <td className="py-3 px-4 text-cyan-300 font-medium">{item.quantity}</td>
                           <td className="py-3 px-4 text-center">
