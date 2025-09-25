@@ -54,7 +54,7 @@ export default function Login() {
     <div className="relative min-h-screen flex items-center justify-center bg-slate-900 overflow-hidden">
       {/* Background image */}
       <img
-        src="/StockSync.png"
+        src="https://res.cloudinary.com/drkhfntxp/image/upload/v1758466285/StockSync_zmpd7y.png"
         alt="StockSync"
         className="absolute inset-0 w-full h-full object-cover opacity-50 blur-md"
       />

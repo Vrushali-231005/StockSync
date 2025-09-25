@@ -34,11 +34,8 @@ export const getAllInventory = async (req, res) => {
 export const addInventory = async (req, res) => {
   try {
     const { name, category, availableQty, totalQuantity, description } = req.body;
-
-    // req.file.path now contains the Cloudinary URL
-    const imageUrl = req.file?.path; 
-
-
+    // If using multer-storage-cloudinary, req.file.path is the Cloudinary URL
+    const imageUrl = req.file?.path || null;
     const newItem = await Inventory.create({
       name,
       category,

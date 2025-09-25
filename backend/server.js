@@ -14,7 +14,7 @@ import InventoryRequestRoutes from './routes/inventoryRequestRoutes.js';
 import { fileURLToPath } from "url"
 import { dirname } from "path"
 
-
+import cloudinaryRoutes from "./routes/cloudinaryRoutes.js";
 
 dotenv.config();
 
@@ -38,6 +38,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/inventoryReq",InventoryRequestRoutes);
+app.use("/api/cloudinary", cloudinaryRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend is running");

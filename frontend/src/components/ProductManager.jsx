@@ -250,11 +250,12 @@ export default function ProductManagement() {
                   {filteredProducts.map((product) => (
                     <tr key={product._id} className="border-b border-slate-700 hover:bg-slate-800 transition-colors duration-200">
                       <td className="p-4 flex items-center gap-3">
-                        <img
-                          src={product.image ? `http://localhost:5757/${product.image}` : "/placeholder.svg"}
+                           <img
+                          src={product.image || "/placeholder.svg"}
                           alt="product"
                           className="w-12 h-12 rounded-md object-cover border border-slate-700"
                         />
+
                         <span className="text-white font-medium">{product.name}</span>
                       </td>
                       <td className="p-4 text-yellow-400">{product.availableQty}</td>

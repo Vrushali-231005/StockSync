@@ -130,7 +130,7 @@ export default function StockSyncHero() {
           <div className="lg:col-span-1 relative">
             <div className="bg-slate-800/50 rounded-2xl p-4 border border-blue-400 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
               <img
-                src="/StockSync.png"
+                src="https://res.cloudinary.com/drkhfntxp/image/upload/v1758466285/StockSync_zmpd7y.png"
                 alt="StockSync Dashboard Preview"
                 className="w-full h-auto rounded-xl"
               />
