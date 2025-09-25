@@ -1,5 +1,6 @@
 import Inventory from "../models/inventory.js";
 import Employee from "../models/employee.js";
+import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import path from "path";
 
@@ -29,27 +30,32 @@ export const getAllInventory = async (req, res) => {
 
 
 // Add new inventory
+
 export const addInventory = async (req, res) => {
   try {
-    const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : "";
-    console.log("📸 Uploaded Image Path:", imagePath); // ADD THIS
+    const { name, category, availableQty, totalQuantity, description } = req.body;
 
-    const newItem = new Inventory({
-      name: req.body.name,
-      category: req.body.category,
-      availableQty: parseInt(req.body.availableQty),
-      totalQuantity: parseInt(req.body.totalQuantity),
-      description: req.body.description,
-      image: imagePath, // ✅ This line was missing before!
+    // req.file.path now contains the Cloudinary URL
+    const imageUrl = req.file?.path; 
+
+
+    const newItem = await Inventory.create({
+      name,
+      category,
+      availableQty,
+      totalQuantity,
+      description,
+      image: imageUrl,
+
     });
 
-    const savedItem = await newItem.save();
-    console.log("✅ Saved Item:", savedItem);
-    res.status(201).json(savedItem);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(201).json({ message: "Inventory added successfully", newItem });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to add inventory" });
   }
 };
+
 
 
 // Edit an inventory

@@ -6,8 +6,8 @@ const employeeSchema = new mongoose.Schema({
   department: String,
   deskNumber: String,
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // 🔹 new
-  role: { type: String, enum: ["admin", "employee"], default: "employee" }, // 🔹 new
+  password: { type: String, required: true }, 
+  role: { type: String, enum: ["admin", "employee"], default: "employee" }, 
   phone: String,
   age: Number,
   gender: String,
