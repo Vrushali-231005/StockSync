@@ -124,7 +124,7 @@ export default function EmployeeManagement() {
     setEmployees((prev) => [...prev, savedEmployee]);
     setFlash({ message: "✅ Employee added successfully! Email Sent to registered one", type: "success" });
   } else if (type === "update") {
-    // Update edited employee in the list
+    
     setEmployees((prev) =>
       prev.map((emp) => (emp._id === savedEmployee._id ? savedEmployee : emp))
     );

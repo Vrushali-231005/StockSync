@@ -85,7 +85,6 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
       const responseData = await res.json();
       const savedEmployee = responseData.employee || responseData;
 
-      // Pass it to parent along with type
       onSubmit(savedEmployee, employee ? "update" : "add");
     } catch (err) {
       console.error(err);

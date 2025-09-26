@@ -104,7 +104,7 @@ export const addEmployee = async (req, res) => {
       console.error("❌ Failed to send email:", emailError.message);
     });
 
-    // ✅ Respond immediately
+    
     res.status(201).json({
       message: "Employee added successfully. Password sent via email if email delivery succeeded.",
       employee: newEmployee,

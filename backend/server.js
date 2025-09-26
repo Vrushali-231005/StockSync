@@ -49,7 +49,7 @@ app.get("/ping", (req, res) => {
   res.status(200).json({ message: "Server is alive 🚀" });
 });
 
-// MongoDB connection
+
 mongoose.connect(process.env.MONGO_URL)
   .then(() => {
     console.log('✅ MongoDB Connected');
