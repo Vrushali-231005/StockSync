@@ -121,12 +121,16 @@ export default function EmployeeManagement() {
 
   if (type === "add") {
     // Append new employee to the end of the list
-    setEmployees((prev) => [...prev, savedEmployee]);
-    setFlash({ message: "✅ Employee added successfully! Email Sent to registered one", type: "success" });
+    setEmployees((prev) => [...prev, savedEmployee.employee]); // extract employee
+    setFlash({
+      message: "✅ Employee added successfully! Email sent to registered one",
+      type: "success",
+    });
   } else if (type === "update") {
-    
     setEmployees((prev) =>
-      prev.map((emp) => (emp._id === savedEmployee._id ? savedEmployee : emp))
+      prev.map((emp) =>
+        emp._id === savedEmployee.employee._id ? savedEmployee.employee : emp
+      )
     );
     setFlash({ message: "✅ Employee updated successfully!", type: "success" });
   }
@@ -134,6 +138,7 @@ export default function EmployeeManagement() {
   setShowForm(false);
   setEditingEmployee(null);
 };
+
 
 
 
