@@ -38,7 +38,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/inventoryReq",InventoryRequestRoutes);
-app.use("/api/cloudinary", cloudinaryRoutes);
+//app.use("/api/cloudinary", cloudinaryRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend is running");

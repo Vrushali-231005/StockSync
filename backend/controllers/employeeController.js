@@ -94,26 +94,27 @@ export const addEmployee = async (req, res) => {
 
     await newEmployee.save();
 
-    // Send welcome email safely
-    try {
-      await sendEmail(
-        email,
-        "Welcome to StockSync 🎉",
-        `Hi ${name}, your account has been created. Email: ${email}, Password: ${password}`,
-        welcomeTemplate(name, email, password)
-      );
-    } catch (emailError) {
+    // ✅ Fire-and-forget email (non-blocking, response won’t hang)
+    sendEmail(
+      email,
+      "Welcome to StockSync 🎉",
+      `Hi ${name}, your account has been created. Email: ${email}, Password: ${password}`,
+      welcomeTemplate(name, email, password)
+    ).catch((emailError) => {
       console.error("❌ Failed to send email:", emailError.message);
-    }
+    });
 
+    // ✅ Respond immediately
     res.status(201).json({
       message: "Employee added successfully. Password sent via email if email delivery succeeded.",
       employee: newEmployee,
     });
+
   } catch (error) {
     res.status(500).json({ message: "Error adding employee", error: error.message });
   }
 };
+
 // ✅ Update employee
 export const updateEmployee = async (req, res) => {
   try {

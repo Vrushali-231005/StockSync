@@ -113,16 +113,29 @@ export default function EmployeeManagement() {
   };
 
   // Form submit
-  const handleFormSubmit = async (success) => {
-    if (success) {
-      await fetchEmployees(currentPage);
-      setShowForm(false);
-      setEditingEmployee(null);
-      setFlash({ message: "✅ Employee added successfully! Email Sent!", type: "success" });
-    } else {
-      setFlash({ message: "❌ Failed to save employee", type: "error" });
-    }
-  };
+ const handleFormSubmit = (savedEmployee, type) => {
+  if (!savedEmployee) {
+    setFlash({ message: "❌ Failed to save employee", type: "error" });
+    return;
+  }
+
+  if (type === "add") {
+    // Append new employee to the end of the list
+    setEmployees((prev) => [...prev, savedEmployee]);
+    setFlash({ message: "✅ Employee added successfully! Email Sent to registered one", type: "success" });
+  } else if (type === "update") {
+    // Update edited employee in the list
+    setEmployees((prev) =>
+      prev.map((emp) => (emp._id === savedEmployee._id ? savedEmployee : emp))
+    );
+    setFlash({ message: "✅ Employee updated successfully!", type: "success" });
+  }
+
+  setShowForm(false);
+  setEditingEmployee(null);
+};
+
+
 
   const openAssignInventory = (employee) => {
     setSelectedEmployeeForInventory(employee);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, Copy } from "lucide-react";
 import { generatePassword } from "../../utils/passwordGenerator";
-import { BASE_URL } from "../../utils/passwordGenerator"
+import { BASE_URL } from "../../utils/passwordGenerator";
 
 export default function EmployeeForm({ employee, onSubmit, onCancel }) {
   const [formData, setFormData] = useState({
@@ -81,7 +81,12 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
       if (!res.ok) throw new Error("Failed to save employee");
 
-      onSubmit(true);
+      // ✅ Always extract the employee object
+      const responseData = await res.json();
+      const savedEmployee = responseData.employee || responseData;
+
+      // Pass it to parent along with type
+      onSubmit(savedEmployee, employee ? "update" : "add");
     } catch (err) {
       console.error(err);
       onSubmit(false);
@@ -110,8 +115,8 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
             { label: "Department", field: "department", type: "text", required: true },
             { label: "Desk Number", field: "deskNumber", type: "text", required: true },
             { label: "Email", field: "email", type: "email", required: true },
-            { label: "Phone", field: "phone", type: "text",required: true },
-            { label: "Age", field: "age", type: "number",required: true },
+            { label: "Phone", field: "phone", type: "text", required: true },
+            { label: "Age", field: "age", type: "number", required: true },
           ].map(({ label, field, type, required }) => (
             <div key={field}>
               <label className="block text-white font-medium mb-2">
@@ -151,7 +156,9 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
           {/* Gender */}
           <div>
-            <label className="block text-white font-medium mb-2">Gender <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Gender <span className="text-red-500">*</span>
+            </label>
             <select
               value={formData.gender}
               onChange={(e) => handleChange("gender", e.target.value)}
@@ -193,7 +200,9 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
           {/* Role */}
           <div>
-            <label className="block text-white font-medium mb-2">Role <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Role <span className="text-red-500">*</span>
+            </label>
             <select
               value={formData.role}
               onChange={(e) => handleChange("role", e.target.value)}

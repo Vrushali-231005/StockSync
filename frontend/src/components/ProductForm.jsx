@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function ProductForm({ product, onSubmit, onCancel, isLoading }) {
+export default function ProductForm({ product, onSubmit, onCancel, isLoading: parentLoading, refreshList }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -11,6 +11,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -37,15 +38,23 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    await onSubmit(formData);
+
+    setIsLoading(true);
+    try {
+      await onSubmit(formData); // parent handles API call
+      if (refreshList) refreshList(); // optional: refresh table/list
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to save product");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -54,9 +63,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
         
         {/* Header */}
         <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
-          <h2 className="text-2xl font-bold text-white">
-            {product ? "Edit Product" : "Add Product"}
-          </h2>
+          <h2 className="text-2xl font-bold text-white">{product ? "Edit Product" : "Add Product"}</h2>
           <button onClick={onCancel} className="text-white hover:text-gray-300">✕</button>
         </div>
 
@@ -64,9 +71,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name */}
           <div>
-            <label className="block text-white font-medium mb-2">
-              Name <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-white font-medium mb-2">Name <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={formData.name}
@@ -79,9 +84,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
 
           {/* Category */}
           <div>
-            <label className="block text-white font-medium mb-2">
-              Category <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-white font-medium mb-2">Category <span className="text-red-500">*</span></label>
             <input
               type="text"
               value={formData.category}
@@ -105,45 +108,28 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
           </div>
 
           {/* Image Upload */}
-          {/* Image Section */}
-<div className="md:col-span-2">
-  <label className="block text-white font-medium mb-2">
-    Image <span className="text-red-500">*</span>
-  </label>
-
-  {product ? (
-    <div className="flex items-center gap-4">
-      {/* Show existing image preview */}
-      {product.image ? (
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-20 h-20 object-cover rounded-lg border border-blue-400"
-        />
-      ) : (
-        <span className="text-gray-400 italic">No image uploaded</span>
-      )}
-      {/* Just show filename */}
-      <span className="text-gray-300">{product.image?.split("/").pop()}</span>
-    </div>
-  ) : (
-    <input
-      type="file"
-      accept="image/*"
-      onChange={(e) => handleChange("image", e.target.files[0])}
-      className="w-full bg-[#112240] border border-blue-400 rounded-lg px-4 py-3 text-white 
-                 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 
-                 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
-    />
-  )}
-</div>
-
+          <div className="md:col-span-2">
+            <label className="block text-white font-medium mb-2">Image <span className="text-red-500">*</span></label>
+            {product ? (
+              <div className="flex items-center gap-4">
+                {product.image ? (
+                  <img src={product.image} alt={product.name} className="w-20 h-20 object-cover rounded-lg border border-blue-400" />
+                ) : <span className="text-gray-400 italic">No image uploaded</span>}
+                <span className="text-gray-300">{product.image?.split("/").pop()}</span>
+              </div>
+            ) : (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleChange("image", e.target.files[0])}
+                className="w-full bg-[#112240] border border-blue-400 rounded-lg px-4 py-3 text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+              />
+            )}
+          </div>
 
           {/* Total Quantity */}
           <div>
-            <label className="block text-white font-medium mb-2">
-              Total Quantity <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-white font-medium mb-2">Total Quantity <span className="text-red-500">*</span></label>
             <input
               type="number"
               value={formData.totalQuantity}
@@ -156,9 +142,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
 
           {/* Available Quantity */}
           <div>
-            <label className="block text-white font-medium mb-2">
-              Available Quantity <span className="text-red-500">*</span>
-            </label>
+            <label className="block text-white font-medium mb-2">Available Quantity <span className="text-red-500">*</span></label>
             <input
               type="number"
               value={formData.availableQty}
@@ -180,10 +164,10 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading }) 
             </button>
             <button
               type="submit"
-              disabled={isLoading}
-              className={`px-6 py-3 rounded-lg text-white ${isLoading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50"}`}
+              disabled={isLoading || parentLoading}
+              className={`px-6 py-3 rounded-lg text-white ${isLoading || parentLoading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50"}`}
             >
-              {isLoading ? "Saving..." : product ? "Update" : "Add"}
+              {isLoading || parentLoading ? "Saving..." : product ? "Update" : "Add"}
             </button>
           </div>
         </form>

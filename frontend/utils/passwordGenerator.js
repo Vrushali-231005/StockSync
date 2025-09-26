@@ -5,4 +5,4 @@ export const generatePassword = (name, deskNumber) => {
   return `${prefix}${deskNumber}_${randomNum}`;
 };
 
-export const BASE_URL = "https://stocksync-inventory-management.onrender.com";
+export const BASE_URL = "http://localhost:5757";
