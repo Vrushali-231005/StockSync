@@ -119,18 +119,19 @@ export default function EmployeeManagement() {
     return;
   }
 
+  // Normalize in case backend wraps employee in { employee: {...} }
+  const employeeData = savedEmployee.employee || savedEmployee;
+
   if (type === "add") {
     // Append new employee to the end of the list
-    setEmployees((prev) => [...prev, savedEmployee.employee]); // extract employee
+    setEmployees((prev) => [...prev, employeeData]);
     setFlash({
       message: "✅ Employee added successfully! Email sent to registered one",
       type: "success",
     });
   } else if (type === "update") {
     setEmployees((prev) =>
-      prev.map((emp) =>
-        emp._id === savedEmployee.employee._id ? savedEmployee.employee : emp
-      )
+      prev.map((emp) => (emp._id === employeeData._id ? employeeData : emp))
     );
     setFlash({ message: "✅ Employee updated successfully!", type: "success" });
   }
@@ -138,7 +139,6 @@ export default function EmployeeManagement() {
   setShowForm(false);
   setEditingEmployee(null);
 };
-
 
 
 
