@@ -119,12 +119,16 @@ export default function EmployeeManagement() {
     return;
   }
 
-  // Normalize in case backend wraps employee in { employee: {...} }
+  // Normalize: get actual employee data from response
   const employeeData = savedEmployee.employee || savedEmployee;
 
+  if (!employeeData._id) {
+    setFlash({ message: "❌ Invalid employee data returned", type: "error" });
+    return;
+  }
+
   if (type === "add") {
-    // Append new employee to the end of the list
-    setEmployees((prev) => [...prev, employeeData]);
+    setEmployees((prev) => [...prev, employeeData]); // add to end
     setFlash({
       message: "✅ Employee added successfully! Email sent to registered one",
       type: "success",
