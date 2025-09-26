@@ -119,29 +119,22 @@ export default function EmployeeManagement() {
     return;
   }
 
-  // Normalize: get actual employee data from response
-  const employeeData = savedEmployee.employee || savedEmployee;
-
-  if (!employeeData._id) {
-    setFlash({ message: "❌ Invalid employee data returned", type: "error" });
-    return;
-  }
-
-  if (type === "add") {
-    setEmployees((prev) => [...prev, employeeData]); // add to end
-    setFlash({
-      message: "✅ Employee added successfully! Email sent to registered one",
-      type: "success",
-    });
-  } else if (type === "update") {
-    setEmployees((prev) =>
-      prev.map((emp) => (emp._id === employeeData._id ? employeeData : emp))
-    );
-    setFlash({ message: "✅ Employee updated successfully!", type: "success" });
-  }
+  setFlash({
+    message: type === "add"
+      ? "✅ Employee added successfully! Email sent to registered one"
+      : "✅ Employee updated successfully!",
+    type: "success",
+  });
 
   setShowForm(false);
   setEditingEmployee(null);
+
+  // Reload last page from backend
+  if (type === "add") {
+    fetchEmployees(currentPage); // fetch last page
+  } else if (type === "update") {
+    fetchEmployees(currentPage); // fetch current page
+  }
 };
 
 
