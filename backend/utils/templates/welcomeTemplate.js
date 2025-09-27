@@ -26,7 +26,7 @@ export const welcomeTemplate = (name, email, password) => `
 
       <!-- Login button -->
       <div style="text-align: center; margin: 30px 0;">
-        <a href="http://localhost:5173/login" style="background: linear-gradient(to right, #3b82f6, #8b5cf6); color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
+        <a href="https://stock-sync-ims.vercel.app/" style="background: linear-gradient(to right, #3b82f6, #8b5cf6); color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">
           Login Now
         </a>
       </div>
