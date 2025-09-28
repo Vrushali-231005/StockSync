@@ -8,6 +8,7 @@ import {
   getAssignedInventory,
   assignInventoryToEmployee,
   removeAssignedInventory,
+  checkEmail,
 } from "../controllers/employeeController.js";
 
 const router = express.Router();
@@ -254,5 +255,7 @@ router.post("/:id/assigned-inventory", assignInventoryToEmployee);
  *         description: Inventory reduced/removed successfully
  */
 router.delete("/:id/assigned-inventory/:inventoryId", removeAssignedInventory);
+
+router.get("/check-email", checkEmail);
 
 export default router;

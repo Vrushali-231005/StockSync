@@ -308,3 +308,16 @@ export const removeAssignedInventory = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+// ✅ Check if email exists
+export const checkEmail = async (req, res) => {
+  try {
+    const { email } = req.query;
+    if (!email) return res.status(400).json({ message: "Email is required" });
+
+    const existing = await Employee.findOne({ email });
+    res.status(200).json({ exists: !!existing, email: existing?.email });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
