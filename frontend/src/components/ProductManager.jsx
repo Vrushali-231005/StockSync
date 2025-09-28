@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  
   Plus,
   Search,
   Edit,
@@ -13,7 +12,7 @@ import {
 import ProductForm from "./ProductForm";
 import FlashMessage from "./FlashMessage";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../../utils/passwordGenerator"
+import { BASE_URL } from "../../utils/passwordGenerator";
 
 export default function ProductManagement() {
   const [products, setProducts] = useState([]);
@@ -29,7 +28,6 @@ export default function ProductManagement() {
   const navigate = useNavigate();
   const itemsPerPage = 6;
 
-  // Fetch products with pagination
   const fetchProducts = async (page = 1) => {
     setLoading(true);
     try {
@@ -53,7 +51,6 @@ export default function ProductManagement() {
     fetchProducts(page);
   };
 
-  // Add product
   const handleAddProduct = async (formDataObj) => {
     try {
       const formData = new FormData();
@@ -62,9 +59,7 @@ export default function ProductManagement() {
       formData.append("category", formDataObj.category);
       formData.append("totalQuantity", formDataObj.totalQuantity);
       formData.append("availableQty", formDataObj.availableQty);
-      if (formDataObj.image) {
-        formData.append("image", formDataObj.image);
-      }
+      if (formDataObj.image) formData.append("image", formDataObj.image);
 
       const res = await fetch(`${BASE_URL}/api/inventory/add`, {
         method: "POST",
@@ -78,12 +73,10 @@ export default function ProductManagement() {
       fetchProducts();
       setShowForm(false);
     } catch (err) {
-      console.error("Error:", err);
       setFlash({ message: "❌ Error saving product", type: "error" });
     }
   };
 
-  // Edit product
   const handleEditProduct = async (data) => {
     if (!editingProduct) return;
     setFormLoading(true);
@@ -96,9 +89,7 @@ export default function ProductManagement() {
       category: data.category,
     };
 
-    if (data.image) {
-      updatedData.image = data.image;
-    }
+    if (data.image) updatedData.image = data.image;
 
     try {
       const res = await fetch(`${BASE_URL}/api/inventory/${editingProduct._id}/edit`, {
@@ -119,51 +110,45 @@ export default function ProductManagement() {
     }
   };
 
-  // Confirm delete product
   const confirmDeleteProduct = (id) => {
-  setFlash({
-    message: "Are you sure you want to delete this product?",
-    type: "info",
-    buttons: (
-      <>
-        <button
-          onClick={async () => {
-            setFlash({ message: "", type: "" }); // Close flash first
-            setLoading(true);
-            try {
-              const res = await fetch(`${BASE_URL}/api/inventory/${id}/delete`, {
-                method: "DELETE",
-              });
-
-              const data = await res.json();
-
-              if (res.ok) {
-                setProducts((prev) => prev.filter((product) => product._id !== id));
-                setFlash({ message: "🗑️ Product and all assigned inventories deleted!", type: "success" });
-              } else {
-                setFlash({ message: data.message || "❌ Could not delete product", type: "error" });
+    setFlash({
+      message: "Are you sure you want to delete this product?",
+      type: "info",
+      buttons: (
+        <>
+          <button
+            onClick={async () => {
+              setFlash({ message: "", type: "" });
+              setLoading(true);
+              try {
+                const res = await fetch(`${BASE_URL}/api/inventory/${id}/delete`, { method: "DELETE" });
+                const data = await res.json();
+                if (res.ok) {
+                  setProducts((prev) => prev.filter((product) => product._id !== id));
+                  setFlash({ message: "🗑️ Product deleted!", type: "success" });
+                } else {
+                  setFlash({ message: data.message || "❌ Could not delete product", type: "error" });
+                }
+              } catch (err) {
+                setFlash({ message: "❌ Could not delete product", type: "error" });
+              } finally {
+                setLoading(false);
               }
-            } catch (err) {
-              setFlash({ message: "❌ Could not delete product", type: "error" });
-            } finally {
-              setLoading(false);
-            }
-          }}
-          className="mr-2 px-3 py-1 bg-red-600 text-white rounded-md"
-        >
-          Yes
-        </button>
-        <button
-          onClick={() => setFlash({ message: "", type: "" })}
-          className="px-3 py-1 bg-gray-600 text-white rounded-md"
-        >
-          No
-        </button>
-      </>
-    ),
-  });
-};
-
+            }}
+            className="mr-2 px-3 py-1 bg-red-600 text-white rounded-md"
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => setFlash({ message: "", type: "" })}
+            className="px-3 py-1 bg-gray-600 text-white rounded-md"
+          >
+            No
+          </button>
+        </>
+      ),
+    });
+  };
 
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -180,38 +165,36 @@ export default function ProductManagement() {
         />
       )}
 
-      <div className="w-full min-h-screen bg-[#0a192f] px-6 py-6">
+      <div className="w-full min-h-screen bg-[#0a192f] px-4 sm:px-6 py-6">
         {/* Header */}
-       <header className="relative border-b border-slate-700 pb-4 mb-8 flex items-center">
-    {/* Left Logo */}
-    <div className="flex items-center space-x-3 absolute left-0">
-      <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Package className="w-6 h-6 text-white" />
-                </div>
-      <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-        StockSync
-      </h1>
-    </div>
+        <header className="relative border-b border-slate-700 pb-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <Package className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              StockSync
+            </h1>
+          </div>
 
-  {/* Center Title */}
-  <div className="mx-auto text-center">
-    <h2 className="text-3xl font-bold text-white">My Products</h2>
-    <p className="text-gray-400 text-sm">Manage your inventory efficiently</p>
-  </div>
-</header>
+          <div className="text-center sm:text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">My Products</h2>
+            <p className="text-gray-400 text-sm sm:text-base">Manage your inventory efficiently</p>
+          </div>
+        </header>
 
         {/* Back & Add Buttons */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center mb-6 gap-4 sm:gap-0">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 bg-[#112240] hover:bg-[#15305a] text-white px-4 py-2 rounded-lg border border-blue-400 transition-all"
+            className="flex items-center justify-center gap-2 bg-[#112240] hover:bg-[#15305a] text-white px-4 py-2 rounded-lg border border-blue-400 transition-all w-full sm:w-auto"
           >
             <ArrowBigLeft className="w-5 h-5" />
             Back
           </button>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 hover:opacity-90 transition"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 hover:opacity-90 transition w-full sm:w-auto"
           >
             <Plus className="w-5 h-5" />
             <span className="font-medium">Add Product</span>
@@ -219,7 +202,7 @@ export default function ProductManagement() {
         </div>
 
         {/* Search */}
-        <div className="bg-[#112240] border border-blue-400/30 rounded-xl p-6 mb-8 shadow-lg">
+        <div className="bg-[#112240] border border-blue-400/30 rounded-xl p-4 sm:p-6 mb-6 shadow-lg">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -233,12 +216,12 @@ export default function ProductManagement() {
         </div>
 
         {/* Table */}
-        <div className="bg-[#112240] border border-blue-400 rounded-2xl overflow-hidden">
+        <div className="bg-[#112240] border border-blue-400 rounded-2xl overflow-x-auto">
           {loading ? (
             <div className="text-center text-gray-300 p-10">Loading...</div>
           ) : (
             <>
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[600px] sm:min-w-full">
                 <thead className="bg-[#0b1b33] border-b border-blue-400">
                   <tr>
                     {["Product", "Available Qty", "Total Qty", "Category", "Description", "Actions"].map((header) => (
@@ -250,12 +233,11 @@ export default function ProductManagement() {
                   {filteredProducts.map((product) => (
                     <tr key={product._id} className="border-b border-slate-700 hover:bg-slate-800 transition-colors duration-200">
                       <td className="p-4 flex items-center gap-3">
-                           <img
+                        <img
                           src={product.image || "/placeholder.svg"}
                           alt="product"
                           className="w-12 h-12 rounded-md object-cover border border-slate-700"
                         />
-
                         <span className="text-white font-medium">{product.name}</span>
                       </td>
                       <td className="p-4 text-yellow-400">{product.availableQty}</td>
@@ -263,7 +245,7 @@ export default function ProductManagement() {
                       <td className="p-4 text-white">{product.category}</td>
                       <td className="p-4 text-gray-300">{product.description}</td>
                       <td className="p-4 text-center">
-                        <div className="flex justify-center gap-2">
+                        <div className="flex justify-center gap-2 flex-wrap">
                           <button
                             onClick={() => setEditingProduct(product)}
                             className="text-blue-400 hover:bg-blue-500/20 p-2 rounded-md border border-blue-400/40"
@@ -285,22 +267,26 @@ export default function ProductManagement() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex justify-center gap-4 p-6">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                  >
-                    <ChevronLeft />
-                  </button>
-                  <span className="text-white px-2 py-2">Page {currentPage} of {totalPages}</span>
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                  >
-                    <ChevronRight />
-                  </button>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 p-4">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    >
+                      <ChevronLeft />
+                    </button>
+                    <span className="text-white px-2 py-2 text-sm sm:text-base">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                    >
+                      <ChevronRight />
+                    </button>
+                  </div>
                 </div>
               )}
             </>

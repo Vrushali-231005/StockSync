@@ -47,23 +47,29 @@ export default function AssignedInventory() {
   return (
     <div className="min-h-screen w-full bg-[#0a192f] px-6 py-6">
       {/* Header */}
-      <header className="relative border-b border-slate-700 pb-4 mb-8 flex items-center">
-        <div className="flex items-center space-x-3 absolute left-0">
-         <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                     <Package className="w-6 h-6 text-white" />
-                   </div>
-          <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            StockSync
-          </h1>
-        </div>
+      {/* Header */}
+<header className="relative border-b border-slate-700 pb-4 mb-8 flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
+  {/* Logo + StockSync */}
+  <div className="flex items-center space-x-3 mx-auto sm:mx-0">
+    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+      <Package className="w-6 h-6 text-white" />
+    </div>
+    <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent break-words">
+      StockSync
+    </h1>
+  </div>
 
-        <div className="mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white">Assigned Inventory</h2>
-          <p className="text-gray-400 text-sm">
-            Items assigned to {employeeName || "you"}
-          </p>
-        </div>
-      </header>
+  {/* Page Title */}
+  <div className="text-center sm:text-left">
+    <h2 className="text-3xl font-bold text-white break-words">
+      Assigned Inventory
+    </h2>
+    <p className="text-gray-400 text-sm">
+      Items assigned to {employeeName || "you"}
+    </p>
+  </div>
+</header>
+
 
      {/* Back + Search */}
 <div className="flex justify-between items-center mb-4 gap-4 flex-wrap">

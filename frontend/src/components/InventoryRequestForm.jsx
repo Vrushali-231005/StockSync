@@ -111,21 +111,22 @@ export default function InventoryRequestForm() {
   return (
     <div className="min-h-screen bg-[#0a192f] px-6 py-6">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-slate-700 pb-4 mb-8">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <Package className="w-6 h-6 text-white" />
-          </div>
-          <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            StockSync
-          </h1>
-        </div>
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-white">Inventory Request</h2>
-          <p className="text-gray-400 text-sm">Request new or exchange items</p>
-        </div>
-        <div className="w-12" />
-      </header>
+      {/* Header */}
+<header className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-700 pb-4 mb-8 space-y-4 sm:space-y-0">
+  <div className="flex items-center space-x-3">
+    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+      <Package className="w-6 h-6 text-white" />
+    </div>
+    <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent break-words">
+      StockSync
+    </h1>
+  </div>
+
+  <div className="text-center sm:text-left">
+    <h2 className="text-3xl font-bold text-white break-words">Inventory Request</h2>
+    <p className="text-gray-400 text-sm">Request new or exchange items</p>
+  </div>
+</header>
 
       {/* Back Button */}
       <div className="mb-6">

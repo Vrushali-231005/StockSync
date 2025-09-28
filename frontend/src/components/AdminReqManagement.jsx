@@ -6,11 +6,10 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
-  UserCircle,
   ArrowBigLeft,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import FlashMessage from "./FlashMessage"; // Your FlashMessage component
+import FlashMessage from "./FlashMessage";
 import { BASE_URL } from "../../utils/passwordGenerator";
 
 export default function AdminRequestManagement() {
@@ -31,7 +30,6 @@ export default function AdminRequestManagement() {
       if (!res.ok) throw new Error("Failed to fetch requests");
 
       const allRequests = await res.json();
-
       allRequests.sort(
         (a, b) =>
           new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime()
@@ -53,7 +51,6 @@ export default function AdminRequestManagement() {
     fetchRequests(1);
   }, []);
 
-  // Approve / Reject confirmation using flash
   const handleStatusUpdate = (id, status) => {
     setFlash({
       message: `Are you sure you want to ${status} this request?`,
@@ -94,7 +91,6 @@ export default function AdminRequestManagement() {
     });
   };
 
-  // Delete request with flash
   const handleDeleteRequest = (id) => {
     setFlash({
       message: "Are you sure you want to delete this request?",
@@ -151,8 +147,7 @@ export default function AdminRequestManagement() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#0a192f] px-6 py-6">
-      {/* Flash Message */}
+    <div className="w-full min-h-screen bg-[#0a192f] px-4 sm:px-6 py-6">
       {flash.message && (
         <FlashMessage
           message={flash.message}
@@ -163,24 +158,22 @@ export default function AdminRequestManagement() {
       )}
 
       {/* Header */}
-      <header className="relative border-b border-slate-700 pb-4 mb-8 flex items-center">
-  {/* Left Logo */}
-  <div className="flex items-center space-x-3 absolute left-0">
-    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6 text-white" />
-              </div>
-    <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-      StockSync
-    </h1>
-  </div>
-
-  {/* Center Title */}
-  <div className="mx-auto text-center">
-    <h2 className="text-3xl font-bold text-white">Manage Requests</h2>
-    <p className="text-gray-400 text-sm">Review and Manage Inventory Request</p>
-  </div>
-</header>
-
+      <header className="relative border-b border-slate-700 pb-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
+        <div className="flex items-center space-x-3">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <Package className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            StockSync
+          </h1>
+        </div>
+        <div className="text-center sm:text-left">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white">Manage Requests</h2>
+          <p className="text-gray-400 text-sm sm:text-base">
+            Review and Manage Inventory Requests
+          </p>
+        </div>
+      </header>
 
       {/* Back Button */}
       <div className="mb-6">
@@ -194,7 +187,7 @@ export default function AdminRequestManagement() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#112240] border border-blue-400 rounded-2xl overflow-hidden">
+      <div className="bg-[#112240] border border-blue-400 rounded-2xl overflow-x-auto shadow-lg">
         {loading ? (
           <div className="text-center text-gray-300 p-10">Loading...</div>
         ) : error ? (
@@ -203,7 +196,7 @@ export default function AdminRequestManagement() {
           <div className="text-center py-20 text-gray-300">No requests found</div>
         ) : (
           <>
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[900px] sm:min-w-full">
               <thead className="bg-[#0b1b33] border-b border-blue-400">
                 <tr>
                   {[
@@ -261,7 +254,7 @@ export default function AdminRequestManagement() {
                           })
                         : "N/A"}
                     </td>
-                    <td className="p-4 flex gap-2">
+                    <td className="p-4 flex gap-2 flex-wrap">
                       {req.status === "pending" && (
                         <>
                           <button
@@ -292,7 +285,7 @@ export default function AdminRequestManagement() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center gap-4 p-6">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 p-4">
                 <button
                   onClick={() => fetchRequests(currentPage - 1)}
                   disabled={currentPage === 1}

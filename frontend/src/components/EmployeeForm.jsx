@@ -48,7 +48,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
       } catch (err) {
         console.error("Email check failed", err);
       }
-    }, 500); // debounce
+    }, 500);
     return () => clearTimeout(timer);
   }, [formData.email, employee]);
 
@@ -90,50 +90,50 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("▶️ Submitting form", formData);
+    e.preventDefault();
+    console.log("▶️ Submitting form", formData);
 
-  if (Object.values(errors).some((err) => err)) {
-    console.log("❌ Blocked by validation", errors);
-    return;
-  }
+    if (Object.values(errors).some((err) => err)) {
+      console.log("❌ Blocked by validation", errors);
+      return;
+    }
 
-  setIsLoading(true);
-  try {
-    const method = employee ? "PUT" : "POST";
-    const url = employee
-      ? `${BASE_URL}/api/employees/${employee._id}/edit`
-      : `${BASE_URL}/api/employees/add`;
+    setIsLoading(true);
+    try {
+      const method = employee ? "PUT" : "POST";
+      const url = employee
+        ? `${BASE_URL}/api/employees/${employee._id}/edit`
+        : `${BASE_URL}/api/employees/add`;
 
-    const payload = {
-      ...formData,
-      deskNumber: formData.deskNumber.startsWith("D-")
-        ? formData.deskNumber
-        : `D-${formData.deskNumber}`,
-    };
+      const payload = {
+        ...formData,
+        deskNumber: formData.deskNumber.startsWith("D-")
+          ? formData.deskNumber
+          : `D-${formData.deskNumber}`,
+      };
 
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (!res.ok) throw new Error("Failed to save employee");
+      if (!res.ok) throw new Error("Failed to save employee");
 
-    const responseData = await res.json();
-    const savedEmployee = responseData.employee || responseData;
+      const responseData = await res.json();
+      const savedEmployee = responseData.employee || responseData;
 
-    onSubmit(savedEmployee, employee ? "update" : "add");
-  } catch (err) {
-    console.error("❌ Error in handleSubmit", err);
-    onSubmit(false);
-  } finally {
-    setIsLoading(false);
-  }
-};
+      onSubmit(savedEmployee, employee ? "update" : "add");
+    } catch (err) {
+      console.error("❌ Error in handleSubmit", err);
+      onSubmit(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 sm:px-0">
       <div className="bg-[#0a192f] border border-blue-400 rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-lg">
         {/* Header */}
         <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
@@ -146,8 +146,8 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {[ 
             { label: "Name", field: "name", type: "text", required: true },
             { label: "Department", field: "department", type: "text", required: true },
             { label: "Desk Number", field: "deskNumber", type: "text", required: true },
@@ -210,7 +210,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
           {/* Password (read-only) */}
           {!employee && (
-            <div className="col-span-2 relative">
+            <div className="col-span-1 sm:col-span-2 relative">
               <label className="block text-white font-medium mb-2">
                 Password <span className="text-red-500">*</span>
               </label>
@@ -250,8 +250,8 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
             </select>
           </div>
 
-          {/* Buttons (inside form now) */}
-          <div className="col-span-2 flex justify-end gap-4 mt-6">
+          {/* Buttons */}
+          <div className="col-span-1 sm:col-span-2 flex flex-col sm:flex-row justify-end gap-3 mt-6">
             <button
               type="button"
               onClick={onCancel}
@@ -261,7 +261,6 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
             </button>
             <button
               type="submit"
-              
               className={`px-6 py-3 rounded-lg text-white ${
                 isLoading
                   ? "bg-gray-500 cursor-not-allowed"

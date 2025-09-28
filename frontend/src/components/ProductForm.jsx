@@ -47,8 +47,8 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
 
     setIsLoading(true);
     try {
-      await onSubmit(formData); // parent handles API call
-      if (refreshList) refreshList(); // optional: refresh table/list
+      await onSubmit(formData);
+      if (refreshList) refreshList();
     } catch (err) {
       console.error(err);
       alert(err.message || "Failed to save product");
@@ -58,9 +58,8 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 sm:px-0">
       <div className="bg-[#0a192f] border border-blue-400 rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-lg">
-        
         {/* Header */}
         <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-3">
           <h2 className="text-2xl font-bold text-white">{product ? "Edit Product" : "Add Product"}</h2>
@@ -68,10 +67,12 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {/* Name */}
           <div>
-            <label className="block text-white font-medium mb-2">Name <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               value={formData.name}
@@ -84,7 +85,9 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
 
           {/* Category */}
           <div>
-            <label className="block text-white font-medium mb-2">Category <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Category <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               value={formData.category}
@@ -96,8 +99,10 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
           </div>
 
           {/* Description */}
-          <div className="md:col-span-2">
-            <label className="block text-white font-medium mb-2">Description <span className="text-red-500">*</span></label>
+          <div className="sm:col-span-2">
+            <label className="block text-white font-medium mb-2">
+              Description <span className="text-red-500">*</span>
+            </label>
             <textarea
               rows={3}
               value={formData.description}
@@ -108,14 +113,16 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
           </div>
 
           {/* Image Upload */}
-          <div className="md:col-span-2">
-            <label className="block text-white font-medium mb-2">Image <span className="text-red-500">*</span></label>
+          <div className="sm:col-span-2">
+            <label className="block text-white font-medium mb-2">
+              Image <span className="text-red-500">*</span>
+            </label>
             {product ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="w-20 h-20 object-cover rounded-lg border border-blue-400" />
                 ) : <span className="text-gray-400 italic">No image uploaded</span>}
-                <span className="text-gray-300">{product.image?.split("/").pop()}</span>
+                <span className="text-gray-300 break-words">{product.image?.split("/").pop()}</span>
               </div>
             ) : (
               <input
@@ -129,7 +136,9 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
 
           {/* Total Quantity */}
           <div>
-            <label className="block text-white font-medium mb-2">Total Quantity <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Total Quantity <span className="text-red-500">*</span>
+            </label>
             <input
               type="number"
               value={formData.totalQuantity}
@@ -142,7 +151,9 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
 
           {/* Available Quantity */}
           <div>
-            <label className="block text-white font-medium mb-2">Available Quantity <span className="text-red-500">*</span></label>
+            <label className="block text-white font-medium mb-2">
+              Available Quantity <span className="text-red-500">*</span>
+            </label>
             <input
               type="number"
               value={formData.availableQty}
@@ -154,7 +165,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading: pa
           </div>
 
           {/* Buttons */}
-          <div className="md:col-span-2 flex justify-end gap-4 mt-4">
+          <div className="sm:col-span-2 flex flex-col sm:flex-row justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={onCancel}
