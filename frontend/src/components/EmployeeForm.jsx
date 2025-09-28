@@ -90,42 +90,51 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (Object.keys(errors).length > 0 || emailExists) return;
+  e.preventDefault();
+  if (Object.keys(errors).length > 0) return;
 
-    setIsLoading(true);
-    try {
-      const method = employee ? "PUT" : "POST";
-      const url = employee
-        ? `${BASE_URL}/api/employees/${employee._id}/edit`
-        : `${BASE_URL}/api/employees/add`;
+  setIsLoading(true);
+  try {
+    const method = employee ? "PUT" : "POST";
+    const url = employee
+      ? `${BASE_URL}/api/employees/${employee._id}/edit`
+      : `${BASE_URL}/api/employees/add`;
 
-      const payload = {
-        ...formData,
-        deskNumber: formData.deskNumber.startsWith("D-")
-          ? formData.deskNumber
-          : `D-${formData.deskNumber}`,
-      };
+    const payload = {
+      ...formData,
+      deskNumber: formData.deskNumber.startsWith("D-")
+        ? formData.deskNumber
+        : `D-${formData.deskNumber}`,
+    };
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-      if (!res.ok) throw new Error("Failed to save employee");
+    const responseData = await res.json();
 
-      const responseData = await res.json();
-      const savedEmployee = responseData.employee || responseData;
-
-      onSubmit(savedEmployee, employee ? "update" : "add");
-    } catch (err) {
-      console.error(err);
-      onSubmit(false);
-    } finally {
-      setIsLoading(false);
+    if (!res.ok) {
+      // Check if server returned duplicate email error
+      if (responseData.error?.includes("duplicate key")) {
+        setErrors((prev) => ({ ...prev, email: "Email already exists" }));
+      } else {
+        onSubmit(false);
+      }
+      return;
     }
-  };
+
+    const savedEmployee = responseData.employee || responseData;
+    onSubmit(savedEmployee, employee ? "update" : "add");
+  } catch (err) {
+    console.error(err);
+    onSubmit(false);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
