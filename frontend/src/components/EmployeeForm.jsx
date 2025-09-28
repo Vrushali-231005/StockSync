@@ -12,15 +12,16 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
     phone: employee?.phone || "",
     age: employee?.age || "",
     gender: employee?.gender || "",
-    password: employee?.password || "", // only for new employees
+    password: employee?.password || "",
     role: employee?.role || "employee",
   });
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [emailExists, setEmailExists] = useState(false);
 
-  // Auto-generate password for new employees when name + deskNumber are entered
+  // Auto-generate password for new employees
   useEffect(() => {
     if (!employee && formData.name && formData.deskNumber) {
       setFormData((prev) => ({
@@ -30,18 +31,55 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
     }
   }, [formData.name, formData.deskNumber, employee]);
 
-  const validate = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.department.trim()) newErrors.department = "Department is required";
-    if (!formData.deskNumber.trim()) newErrors.deskNumber = "Desk Number is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Invalid email format";
-    return newErrors;
-  };
+  // Live email existence check
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (!formData.email) return;
+      try {
+        const res = await fetch(
+          `${BASE_URL}/api/employees/check-email?email=${formData.email}`
+        );
+        const data = await res.json();
+        setEmailExists(data.exists && data.email !== employee?.email);
+        setErrors((prev) => ({
+          ...prev,
+          email: data.exists && data.email !== employee?.email ? "Email already exists" : undefined,
+        }));
+      } catch (err) {
+        console.error("Email check failed", err);
+      }
+    }, 500); // debounce
+    return () => clearTimeout(timer);
+  }, [formData.email, employee]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
+    // Live validation for age and email
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+
+      if (field === "age") {
+        if (!/^\d+$/.test(value) || Number(value) <= 0) {
+          newErrors.age = "Age must be a positive number";
+        } else {
+          delete newErrors.age;
+        }
+      }
+
+      if (field === "email") {
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          newErrors.email = "Invalid email format";
+        } else if (emailExists) {
+          newErrors.email = "Email already exists";
+        } else {
+          delete newErrors.email;
+        }
+      }
+
+      return newErrors;
+    });
+
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
@@ -53,11 +91,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    if (Object.keys(errors).length > 0 || emailExists) return;
 
     setIsLoading(true);
     try {
@@ -81,7 +115,6 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
 
       if (!res.ok) throw new Error("Failed to save employee");
 
-      // ✅ Always extract the employee object
       const responseData = await res.json();
       const savedEmployee = responseData.employee || responseData;
 
@@ -170,7 +203,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
             </select>
           </div>
 
-          {/* Password (read-only for new employee) */}
+          {/* Password (read-only) */}
           {!employee && (
             <div className="col-span-2 relative">
               <label className="block text-white font-medium mb-2">
@@ -224,7 +257,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
           </button>
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || Object.keys(errors).length > 0 || emailExists}
             onClick={handleSubmit}
             className={`px-6 py-3 rounded-lg text-white ${
               isLoading
