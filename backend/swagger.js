@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5757',
+        url: 'https://stocksync-inventory-management.onrender.com/',
       },
     ],
   },
