@@ -90,42 +90,47 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (Object.keys(errors).length > 0 || emailExists) return;
+  e.preventDefault();
+  console.log("▶️ Submitting form", formData);
 
-    setIsLoading(true);
-    try {
-      const method = employee ? "PUT" : "POST";
-      const url = employee
-        ? `${BASE_URL}/api/employees/${employee._id}/edit`
-        : `${BASE_URL}/api/employees/add`;
+  if (Object.values(errors).some((err) => err)) {
+    console.log("❌ Blocked by validation", errors);
+    return;
+  }
 
-      const payload = {
-        ...formData,
-        deskNumber: formData.deskNumber.startsWith("D-")
-          ? formData.deskNumber
-          : `D-${formData.deskNumber}`,
-      };
+  setIsLoading(true);
+  try {
+    const method = employee ? "PUT" : "POST";
+    const url = employee
+      ? `${BASE_URL}/api/employees/${employee._id}/edit`
+      : `${BASE_URL}/api/employees/add`;
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    const payload = {
+      ...formData,
+      deskNumber: formData.deskNumber.startsWith("D-")
+        ? formData.deskNumber
+        : `D-${formData.deskNumber}`,
+    };
 
-      if (!res.ok) throw new Error("Failed to save employee");
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-      const responseData = await res.json();
-      const savedEmployee = responseData.employee || responseData;
+    if (!res.ok) throw new Error("Failed to save employee");
 
-      onSubmit(savedEmployee, employee ? "update" : "add");
-    } catch (err) {
-      console.error(err);
-      onSubmit(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const responseData = await res.json();
+    const savedEmployee = responseData.employee || responseData;
+
+    onSubmit(savedEmployee, employee ? "update" : "add");
+  } catch (err) {
+    console.error("❌ Error in handleSubmit", err);
+    onSubmit(false);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -256,7 +261,7 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
             </button>
             <button
               type="submit"
-              disabled={isLoading || Object.keys(errors).length > 0 || emailExists}
+              
               className={`px-6 py-3 rounded-lg text-white ${
                 isLoading
                   ? "bg-gray-500 cursor-not-allowed"
