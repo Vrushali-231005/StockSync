@@ -4,13 +4,18 @@ import dotenv from "dotenv";
 dotenv.config(); // Load .env
 
 // transporter must be defined here, outside the function
-const transporter = nodemailer.createTransport({
-  service: "gmail",
+export const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true, // must be true for 465
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS, // app password
   },
+  logger: true,
+  debug: true,
 });
+
 
 
 
