@@ -244,30 +244,29 @@ export default function EmployeeForm({ employee, onSubmit, onCancel }) {
               <option value="admin">Admin</option>
             </select>
           </div>
-        </form>
 
-        {/* Buttons */}
-        <div className="flex justify-end gap-4 mt-6">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="px-6 py-3 bg-[#112240] border border-blue-400 rounded-lg text-white hover:bg-[#15305a]"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isLoading || Object.keys(errors).length > 0 || emailExists}
-            onClick={handleSubmit}
-            className={`px-6 py-3 rounded-lg text-white ${
-              isLoading
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50"
-            }`}
-          >
-            {isLoading ? "Saving..." : employee ? "Update" : "Add"}
-          </button>
-        </div>
+          {/* Buttons (inside form now) */}
+          <div className="col-span-2 flex justify-end gap-4 mt-6">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-6 py-3 bg-[#112240] border border-blue-400 rounded-lg text-white hover:bg-[#15305a]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading || Object.keys(errors).length > 0 || emailExists}
+              className={`px-6 py-3 rounded-lg text-white ${
+                isLoading
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50"
+              }`}
+            >
+              {isLoading ? "Saving..." : employee ? "Update" : "Add"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
