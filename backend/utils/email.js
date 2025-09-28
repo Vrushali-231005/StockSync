@@ -1,20 +1,9 @@
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config(); // Load .env variables
-
-// Create transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-// Send email function
 export const sendEmail = async (to, subject, text, html) => {
   try {
+    console.log("📩 Attempting to send email...");
+    console.log("From:", process.env.EMAIL_USER);
+    console.log("To:", to);
+
     const info = await transporter.sendMail({
       from: `"StockSync" <${process.env.EMAIL_USER}>`,
       to,
@@ -22,8 +11,14 @@ export const sendEmail = async (to, subject, text, html) => {
       text, // fallback
       html, // HTML content
     });
-    console.log("✅ Email sent:", info.response);
+
+    console.log("✅ Email sent successfully:", info.response);
+    return true;
   } catch (err) {
-    console.error("❌ Email error:", err);
+    console.error("❌ Email send failed");
+    console.error("Error name:", err.name);
+    console.error("Error message:", err.message);
+    console.error("Full error:", err);
+    return false;
   }
 };
